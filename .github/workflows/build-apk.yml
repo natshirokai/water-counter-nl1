@@ -8,9 +8,14 @@ jobs:
       - uses: actions/setup-java@v4
         with: { distribution: 'temurin', java-version: '17' }
       - uses: android-actions/setup-android@v3
+      - uses: gradle/actions/setup-gradle@v3
+        with: { gradle-version: '8.2' }
       - run: |
-          unzip -o WaterCounter-Clean.zip -d project
-          cp -r project/* . || true
-      - run: ./gradlew assembleDebug || gradle assembleDebug
+          ls -la
+          unzip -o WaterCounter-Clean.zip -d project || unzip -o "*.zip" -d project
+          ls -la project/
+          cp -r project/. . || true
+          ls -la
+      - run: gradle assembleDebug --stacktrace
       - uses: actions/upload-artifact@v4
         with: { name: WaterCounter-APK, path: app/build/outputs/apk/debug/*.apk }
